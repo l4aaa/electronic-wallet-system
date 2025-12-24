@@ -4,7 +4,7 @@
 #include <ctime>
 #include <cstring>
 
-const std::string LOG_PATH = "../transactions.txt";
+const std::string LOG_PATH = "transactions.txt";
 
 void TransactionLogger::log(const std::string& cardNumber, const std::string& type, double amount) {
     std::ofstream file(LOG_PATH, std::ios::app);

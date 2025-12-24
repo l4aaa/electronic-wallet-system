@@ -4,7 +4,7 @@
 #include <cstring>
 #include <stdexcept>
 
-const std::string DB_PATH = "../cards.csv";
+const std::string DB_PATH = "cards.csv";
 
 void print_help() {
     std::cout << "Usage: remote_wallet <command> [args...]\n"

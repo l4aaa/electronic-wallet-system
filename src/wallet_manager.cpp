@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 
-const std::string DB_PATH = "../cards.csv";
+const std::string DB_PATH = "cards.csv";
 
 void print_help() {
     std::cout << "Usage: wallet_manager <command> [args...]\n"
