@@ -4,10 +4,10 @@
 #include <cstring>
 #include <stdexcept>
 
-
 const std::string DB_PATH = "cards.csv";
 
-void print_help() {
+void print_help()
+{
     std::cout << "Usage: wallet_manager <command> [args...]\n"
               << "Commands:\n"
               << "  add_card <card_name> <number> <owner_name> <exp_date>      Add a new card\n"
@@ -18,39 +18,49 @@ void print_help() {
               << "  --help                                                     Show this help message\n";
 }
 
-double parseAmount(const std::string& input) {
-    try {
+double parseAmount(const std::string &input)
+{
+    try
+    {
         size_t processed;
         double amount = std::stod(input, &processed);
-        
-        if (processed != input.length()) {
+
+        if (processed != input.length())
+        {
             throw std::invalid_argument("Trailing characters");
         }
-        
-        if (amount <= 0) {
+
+        if (amount <= 0)
+        {
             std::cerr << "Error: Amount must be a positive value.\n";
             return -1.0;
         }
         return amount;
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception &e)
+    {
         std::cerr << "Error: Invalid numeric format for amount '" << input << "'.\n";
         return -1.0;
     }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
     Wallet wallet;
     wallet.loadFromFile(DB_PATH);
 
-    if (argc < 2) {
+    if (argc < 2)
+    {
         std::cerr << "Unknown command. Use --help to see available commands.\n";
         return 1;
     }
 
     std::string command = argv[1];
 
-    if (command == "add_card") {
-        if (argc < 6) {
+    if (command == "add_card")
+    {
+        if (argc < 6)
+        {
             std::cerr << "Usage: add_card <card_name> <number> <owner_name> <exp_date>\n";
             return 1;
         }
@@ -59,55 +69,68 @@ int main(int argc, char* argv[]) {
         std::string owner = argv[4];
         std::string exp = argv[5];
 
-        if(number.empty() || owner.empty()) {
-             std::cerr << "Error: Card details cannot be empty.\n";
-             return 1;
+        if (number.empty() || owner.empty())
+        {
+            std::cerr << "Error: Card details cannot be empty.\n";
+            return 1;
         }
 
         Card newCard(cardName, number, owner, exp);
         wallet.addCard(newCard);
         wallet.saveToFile(DB_PATH);
         std::cout << "Success: Card added.\n";
-
-    } else if (command == "view_card") {
-        if (argc != 3) {
+    }
+    else if (command == "view_card")
+    {
+        if (argc != 3)
+        {
             std::cerr << "Usage: view_card <number>\n";
             return 1;
         }
         wallet.viewCard(argv[2]);
         wallet.saveToFile(DB_PATH);
-
-    } else if (command == "list_cards") {
+    }
+    else if (command == "list_cards")
+    {
         wallet.listCards();
-
-    } else if (command == "load_money") {
-        if (argc != 4) {
+    }
+    else if (command == "load_money")
+    {
+        if (argc != 4)
+        {
             std::cerr << "Usage: load_money <number> <amount>\n";
             return 1;
         }
         std::string number = argv[2];
-        
-        double amount = parseAmount(argv[3]);
-        if (amount < 0) return 1;
 
-        if (Card* c = wallet.findCard(number)) {
+        double amount = parseAmount(argv[3]);
+        if (amount < 0)
+            return 1;
+
+        if (Card *c = wallet.findCard(number))
+        {
             c->addMoney(amount);
             TransactionLogger::log(number, "LOAD", amount);
             wallet.saveToFile(DB_PATH);
             std::cout << "Success: Loaded " << amount << " onto card " << number << ".\n";
-        } else {
+        }
+        else
+        {
             std::cerr << "Error: Card not found.\n";
             return 1;
         }
-
-    } else if (command == "save") {
+    }
+    else if (command == "save")
+    {
         wallet.saveToFile(DB_PATH);
         std::cout << "Success: Database saved.\n";
-
-    } else if (command == "--help") {
+    }
+    else if (command == "--help")
+    {
         print_help();
-
-    } else {
+    }
+    else
+    {
         std::cerr << "Unknown command. Use --help to see available commands.\n";
         return 1;
     }

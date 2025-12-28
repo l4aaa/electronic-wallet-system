@@ -6,9 +6,10 @@
 #include <ctime>
 #include <iostream>
 
-class TransactionLogger {
+class TransactionLogger
+{
 public:
-    static void log(const std::string& cardNumber, const std::string& type, double amount);
+    static void log(const std::string &cardNumber, const std::string &type, double amount);
     static void viewLogs();
 };
 
